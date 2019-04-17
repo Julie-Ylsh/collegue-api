@@ -30,7 +30,7 @@ public class CollegueControlleur {
 
 	@GetMapping(path="/{matricule}")
 	@ResponseBody // parser l'objet Client
-	public ResponseEntity<String> AfficherMatricule(@PathVariable("matricule") String matricule) {
+	public ResponseEntity<String> AfficherMatricule(@PathVariable String matricule) {
 		
 		try {
 			Collegue collegueTouve = collegueService.rechercherParMatricule(matricule);

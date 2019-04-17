@@ -34,6 +34,10 @@ public class CollegueService {
 	
 	public Collegue rechercherParMatricule(String matriculeRecherche) throws CollegueNonTrouveException {
 		Collegue collegueRecherche = data.get(matriculeRecherche);
+		if (collegueRecherche == null)
+		{
+			throw new CollegueNonTrouveException ();
+		}
 		return collegueRecherche;
 	}
 }
