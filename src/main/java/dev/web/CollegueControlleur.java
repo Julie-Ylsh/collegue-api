@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import dev.entites.Collegue;
 import dev.service.CollegueService;
 
 @RestController
@@ -27,14 +28,14 @@ public class CollegueControlleur {
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody // parser l'objet Client
-	public String AfficherMatricule(@RequestParam("matricule") String matricule) {
+	public ResponseEntity<String> AfficherMatricule(@RequestParam("matricule") String matricule) {
 		String reponse = null;
 		try {
-			collegueService.rechercherParMatricule(matricule);
-			return reponse;
+			Collegue collegueTouve = collegueService.rechercherParMatricule(matricule);
+			return ResponseEntity.status(404).body(collegueTouve.getNom());
 		} catch (CollegueNonTrouveException e) {
-			reponse = ResponseEntity.status(404).body("Collègue non trouvé").toString();
-			return reponse;
+			return ResponseEntity.status(404).body("Collègue non trouvé");
+			 
 		}
 
 	}
