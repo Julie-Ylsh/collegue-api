@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import dev.entites.Collegue;
+import dev.web.CollegueNonTrouveException;
 
 public class CollegueService {
 	private Map<String, Collegue> data = new HashMap<>();
@@ -29,5 +30,10 @@ public class CollegueService {
 		// TODO retourner une liste de collègues dont le nom est fourni
 		List<String> listeNoms = data.values().stream().filter(p -> p.getNom().equals(nomRecherche)).map(p -> p.getMatricule()).collect(Collectors.toList());
 		return listeNoms;
+	}
+	
+	public Collegue rechercherParMatricule(String matriculeRecherche) throws CollegueNonTrouveException {
+		Collegue collegueRecherche = data.get(matriculeRecherche);
+		return collegueRecherche;
 	}
 }
