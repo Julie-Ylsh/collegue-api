@@ -3,6 +3,8 @@ package dev.web;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,13 +28,13 @@ public class CollegueControlleur {
 
 	}
 
-	@RequestMapping(method = RequestMethod.GET)
+	@GetMapping(path="/{matricule}")
 	@ResponseBody // parser l'objet Client
-	public ResponseEntity<String> AfficherMatricule(@RequestParam("matricule") String matricule) {
-		String reponse = null;
+	public ResponseEntity<String> AfficherMatricule(@PathVariable("matricule") String matricule) {
+		
 		try {
 			Collegue collegueTouve = collegueService.rechercherParMatricule(matricule);
-			return ResponseEntity.status(404).body(collegueTouve.getNom());
+			return ResponseEntity.status(200).body(collegueTouve.getNom());
 		} catch (CollegueNonTrouveException e) {
 			return ResponseEntity.status(404).body("Collègue non trouvé");
 			 
