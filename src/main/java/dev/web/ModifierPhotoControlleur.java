@@ -15,7 +15,7 @@ import dev.service.CollegueService;
 
 @RestController
 
-@RequestMapping("/collegue/modifmail")
+@RequestMapping("/collegue/modifphoto")
 public class ModifierPhotoControlleur {
 	CollegueService collegueService = new CollegueService();
 
