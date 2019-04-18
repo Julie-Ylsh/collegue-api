@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.entites.Collegue;
+import dev.service.CollegueInvalideException;
 import dev.service.CollegueService;
 
 @RestController
@@ -21,7 +24,7 @@ public class CollegueControlleur {
 	CollegueService collegueService = new CollegueService();
 
 	@RequestMapping(method = RequestMethod.GET)
-	@ResponseBody // parser l'objet Client
+	@ResponseBody 
 	public List<String> AfficherNom(@RequestParam("nomClient") String nomClient) {
 
 		return collegueService.rechercherParNom(nomClient);
@@ -29,7 +32,7 @@ public class CollegueControlleur {
 	}
 
 	@GetMapping(path="/{matricule}")
-	@ResponseBody // parser l'objet Client
+	@ResponseBody 
 	public ResponseEntity<String> AfficherMatricule(@PathVariable String matricule) {
 		
 		try {
@@ -41,5 +44,19 @@ public class CollegueControlleur {
 		}
 
 	}
-
+	
+	@PostMapping
+	@ResponseBody 
+	public ResponseEntity<String> CreerCollegue(@RequestBody Collegue collegueAAjouter) {
+		
+		try{
+		collegueService.ajouterUnCollegue(collegueAAjouter);
+		return ResponseEntity.status(200).body("Collègue ajouté : " + collegueAAjouter.getNom() + " " + collegueAAjouter.getPrenoms());
+		}
+		
+		catch (CollegueInvalideException e) {
+			return ResponseEntity.status(404).body("Vous n'avez pas entré les bons paramètres");
+		}
+		
+	}
 }

@@ -1,8 +1,10 @@
 package dev.entites;
 
+import java.time.LocalDate;
+
 public class Collegue {
 
-	public Collegue(String nom, String prenoms, String email, String dateDeNaissance, String photoUrl) {
+	public Collegue(String nom, String prenoms, String email, LocalDate dateDeNaissance, String photoUrl) {
 		super();
 		this.nom = nom;
 		this.prenoms = prenoms;
@@ -11,7 +13,7 @@ public class Collegue {
 		this.photoUrl = photoUrl;
 	}
 	
-	public Collegue(String matricule, String nom, String prenoms, String email, String dateDeNaissance, String photoUrl) {
+	public Collegue(String matricule, String nom, String prenoms, String email, LocalDate dateDeNaissance, String photoUrl) {
 		super();
 		this.matricule = matricule;
 		this.nom = nom;
@@ -33,7 +35,7 @@ public class Collegue {
 	private String nom ;
 	private String prenoms ;
 	private String email ;
-	private String dateDeNaissance ;
+	private LocalDate dateDeNaissance ;
 	private String photoUrl ;
 	public String getMatricule() {
 		return matricule;
@@ -59,10 +61,10 @@ public class Collegue {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getDateDeNaissance() {
+	public LocalDate getDateDeNaissance() {
 		return dateDeNaissance;
 	}
-	public void setDateDeNaissance(String dateDeNaissance) {
+	public void setDateDeNaissance(LocalDate dateDeNaissance) {
 		this.dateDeNaissance = dateDeNaissance;
 	}
 	public String getPhotoUrl() {
