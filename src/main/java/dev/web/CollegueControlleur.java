@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.entites.Collegue;
 import dev.entites.Email;
-import dev.service.CollegueInvalideException;
+import dev.exceptions.CollegueInvalideException;
+import dev.exceptions.CollegueNonTrouveException;
 import dev.service.CollegueService;
 
 @RestController
@@ -73,4 +74,6 @@ public class CollegueControlleur {
 			return ResponseEntity.status(404).body("Vous n'avez pas entré les bons paramètres");
 		}
 	}
+	
+	
 }

@@ -9,7 +9,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import dev.entites.Collegue;
-import dev.web.CollegueNonTrouveException;
+import dev.exceptions.CollegueInvalideException;
+import dev.exceptions.CollegueNonTrouveException;
 
 public class CollegueService {
 	private Map<String, Collegue> data = new HashMap<>();

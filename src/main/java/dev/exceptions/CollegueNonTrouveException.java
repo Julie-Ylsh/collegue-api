@@ -1,4 +1,4 @@
-package dev.web;
+package dev.exceptions;
 
 public class CollegueNonTrouveException extends Exception {
 

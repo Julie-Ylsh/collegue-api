@@ -6,9 +6,9 @@ import java.util.UUID;
 import org.junit.Test;
 
 import dev.entites.Collegue;
-import dev.service.CollegueInvalideException;
+import dev.exceptions.CollegueInvalideException;
+import dev.exceptions.CollegueNonTrouveException;
 import dev.service.CollegueService;
-import dev.web.CollegueNonTrouveException;
 
 public class ClasseTest {
 	String matricule = UUID.randomUUID().toString();
