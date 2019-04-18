@@ -8,6 +8,7 @@ import org.junit.Test;
 import dev.entites.Collegue;
 import dev.service.CollegueInvalideException;
 import dev.service.CollegueService;
+import dev.web.CollegueNonTrouveException;
 
 public class ClasseTest {
 	String matricule = UUID.randomUUID().toString();
@@ -16,50 +17,69 @@ public class ClasseTest {
 
 	@Test(expected = CollegueInvalideException.class)
 	public void testMauvaisNom() throws CollegueInvalideException {
-		
+
 		CollegueService collegueService = new CollegueService();
 		collegueTest.setNom("J");
 		collegueService.ajouterUnCollegue(collegueTest);
 	}
-	
+
 	@Test(expected = CollegueInvalideException.class)
 	public void testMauvaisPrenom() throws CollegueInvalideException {
-		
+
 		CollegueService collegueService = new CollegueService();
 		collegueTest.setPrenoms("J");
 		collegueService.ajouterUnCollegue(collegueTest);
 	}
-	
+
 	@Test(expected = CollegueInvalideException.class)
 	public void testMauvaisEmailCourt() throws CollegueInvalideException {
-		
+
 		CollegueService collegueService = new CollegueService();
 		collegueTest.setEmail("a@a");
 		collegueService.ajouterUnCollegue(collegueTest);
 	}
-	
+
 	@Test(expected = CollegueInvalideException.class)
 	public void testMauvaisEmailpasBon() throws CollegueInvalideException {
-		
+
 		CollegueService collegueService = new CollegueService();
 		collegueTest.setEmail("afuejgpa");
 		collegueService.ajouterUnCollegue(collegueTest);
 	}
-	
+
 	@Test(expected = CollegueInvalideException.class)
 	public void testMauvaisURLPhoto() throws CollegueInvalideException {
-		
+
 		CollegueService collegueService = new CollegueService();
 		collegueTest.setPhotoUrl("afuejgpa");
 		collegueService.ajouterUnCollegue(collegueTest);
 	}
-	
+
 	@Test(expected = CollegueInvalideException.class)
 	public void testDateNaissance() throws CollegueInvalideException {
-		
+
 		CollegueService collegueService = new CollegueService();
 		collegueTest.setDateDeNaissance(LocalDate.of(2004, 12, 4));
 		collegueService.ajouterUnCollegue(collegueTest);
+	}
+
+	@Test(expected = CollegueInvalideException.class)
+	public void testModifierMauvaisEmailCourt() throws CollegueInvalideException, CollegueNonTrouveException {
+		CollegueService collegueService = new CollegueService();
+		collegueService.modifierEmail("043", "j@");
+	}
+
+	@Test(expected = CollegueInvalideException.class)
+	public void testModifierMauvaisEmailpasBon() throws CollegueInvalideException, CollegueNonTrouveException {
+		CollegueService collegueService = new CollegueService();
+		collegueService.modifierEmail("043", "jaju");
+	}
+
+	@Test(expected = CollegueInvalideException.class)
+	public void testModifierMauvaisURLPhoto() throws CollegueInvalideException, CollegueNonTrouveException {
+
+		CollegueService collegueService = new CollegueService();
+		collegueService.modifierPhotoUrl("043", "photoUrl");
 	}
 
 }
