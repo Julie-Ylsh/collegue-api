@@ -4,21 +4,31 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import dev.entites.Collegue;
 import dev.exceptions.CollegueInvalideException;
 import dev.exceptions.CollegueNonTrouveException;
 import dev.service.CollegueService;
 
+@RunWith( SpringRunner.class )
+@SpringBootTest
 public class ClasseTest {
+	@Autowired
+	private CollegueService collegueService;
+	
 	String matricule = UUID.randomUUID().toString();
 	Collegue collegueTest = new Collegue(matricule, "Jeltsch", "Julie", "Jeltsch.julie@socite.com",
 			LocalDate.of(1994, 12, 4), "https://www.francetvinfo.fr/image/75596evse-9d87/840/472/7205071.jpg");
 
+	
+
 	@Test(expected = CollegueInvalideException.class)
 	public void testMauvaisNom() throws CollegueInvalideException {
 
-		CollegueService collegueService = new CollegueService();
 		collegueTest.setNom("J");
 		collegueService.ajouterUnCollegue(collegueTest);
 	}
@@ -26,7 +36,6 @@ public class ClasseTest {
 	@Test(expected = CollegueInvalideException.class)
 	public void testMauvaisPrenom() throws CollegueInvalideException {
 
-		CollegueService collegueService = new CollegueService();
 		collegueTest.setPrenoms("J");
 		collegueService.ajouterUnCollegue(collegueTest);
 	}
@@ -34,7 +43,6 @@ public class ClasseTest {
 	@Test(expected = CollegueInvalideException.class)
 	public void testMauvaisEmailCourt() throws CollegueInvalideException {
 
-		CollegueService collegueService = new CollegueService();
 		collegueTest.setEmail("a@a");
 		collegueService.ajouterUnCollegue(collegueTest);
 	}
@@ -42,7 +50,6 @@ public class ClasseTest {
 	@Test(expected = CollegueInvalideException.class)
 	public void testMauvaisEmailpasBon() throws CollegueInvalideException {
 
-		CollegueService collegueService = new CollegueService();
 		collegueTest.setEmail("afuejgpa");
 		collegueService.ajouterUnCollegue(collegueTest);
 	}
@@ -50,7 +57,6 @@ public class ClasseTest {
 	@Test(expected = CollegueInvalideException.class)
 	public void testMauvaisURLPhoto() throws CollegueInvalideException {
 
-		CollegueService collegueService = new CollegueService();
 		collegueTest.setPhotoUrl("afuejgpa");
 		collegueService.ajouterUnCollegue(collegueTest);
 	}
@@ -58,27 +64,23 @@ public class ClasseTest {
 	@Test(expected = CollegueInvalideException.class)
 	public void testDateNaissance() throws CollegueInvalideException {
 
-		CollegueService collegueService = new CollegueService();
 		collegueTest.setDateDeNaissance(LocalDate.of(2004, 12, 4));
 		collegueService.ajouterUnCollegue(collegueTest);
 	}
 
 	@Test(expected = CollegueInvalideException.class)
 	public void testModifierMauvaisEmailCourt() throws CollegueInvalideException, CollegueNonTrouveException {
-		CollegueService collegueService = new CollegueService();
 		collegueService.modifierEmail("043", "j@");
 	}
 
 	@Test(expected = CollegueInvalideException.class)
 	public void testModifierMauvaisEmailpasBon() throws CollegueInvalideException, CollegueNonTrouveException {
-		CollegueService collegueService = new CollegueService();
 		collegueService.modifierEmail("043", "jaju");
 	}
 
 	@Test(expected = CollegueInvalideException.class)
 	public void testModifierMauvaisURLPhoto() throws CollegueInvalideException, CollegueNonTrouveException {
 
-		CollegueService collegueService = new CollegueService();
 		collegueService.modifierPhotoUrl("043", "photoUrl");
 	}
 

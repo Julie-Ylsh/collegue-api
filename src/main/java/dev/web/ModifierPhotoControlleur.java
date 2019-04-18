@@ -1,5 +1,6 @@
 package dev.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,7 +18,8 @@ import dev.service.CollegueService;
 
 @RequestMapping("/collegue/modifphoto")
 public class ModifierPhotoControlleur {
-	CollegueService collegueService = new CollegueService();
+	@Autowired
+	private CollegueService collegueService;
 
 	@PatchMapping(path="/{matricule}")
 	public ResponseEntity<String> afficherModifierPhoto(@PathVariable String matricule, @RequestBody PhotoUrl photo) throws CollegueNonTrouveException {

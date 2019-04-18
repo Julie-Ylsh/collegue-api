@@ -8,10 +8,13 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Service;
+
 import dev.entites.Collegue;
 import dev.exceptions.CollegueInvalideException;
 import dev.exceptions.CollegueNonTrouveException;
 
+@Service
 public class CollegueService {
 	private Map<String, Collegue> data = new HashMap<>();
 
