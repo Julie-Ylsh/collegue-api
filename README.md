@@ -8,4 +8,7 @@ https://julie-collegue-api.herokuapp.com/collegue?nomClient=Jeltsch
 ## Deux chemins différents :
 Utiliser  https://julie-collegue-api.herokuapp.com/collegue/043 pour avoir le collègue avec matricule 43 et lui changer son email
 
-Utilier  https://julie-collegue-api.herokuapp.com/collegue/modifphoto/043 pour avoir le collègue avec matricule 43 et lui changer son email
+Utilier  https://julie-collegue-api.herokuapp.com/collegue/modifphoto/43 pour avoir le collègue avec matricule 43 et lui changer son email
+
+## Implémentation de la jdbc :
+Utiliser http://localhost:8080/h2-console/ pour accéder à la console
