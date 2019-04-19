@@ -3,6 +3,7 @@ package dev.web;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -30,7 +31,7 @@ public class CollegueControlleur {
 
 	@GetMapping
 	@ResponseBody 
-	public List<String> AfficherNom(@RequestParam("nomClient") String nomClient) {
+	public List<String> afficherNom(@RequestParam("nomClient") String nomClient) {
 
 		return collegueService.rechercherParNom(nomClient);
 
@@ -38,13 +39,13 @@ public class CollegueControlleur {
 
 	@GetMapping(path="/{matricule}")
 	@ResponseBody 
-	public ResponseEntity<String> AfficherMatricule(@PathVariable String matricule) {
+	public ResponseEntity<String> afficherMatricule(@PathVariable String matricule) {
 		
 		try {
 			Collegue collegueTouve = collegueService.rechercherParMatricule(matricule);
 			return ResponseEntity.status(200).body(collegueTouve.getNom());
 		} catch (CollegueNonTrouveException e) {
-			return ResponseEntity.status(404).body("Collègue non trouvé");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Collègue non trouvé");
 			 
 		}
 
@@ -52,7 +53,7 @@ public class CollegueControlleur {
 	
 	@PostMapping
 	@ResponseBody 
-	public ResponseEntity<String> CreerCollegue(@RequestBody Collegue collegueAAjouter) {
+	public ResponseEntity<String> creerCollegue(@RequestBody Collegue collegueAAjouter) {
 		
 		try{
 		collegueService.ajouterUnCollegue(collegueAAjouter);

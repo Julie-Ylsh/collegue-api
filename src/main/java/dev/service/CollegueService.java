@@ -2,51 +2,55 @@ package dev.service;
 
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import dev.entites.Collegue;
 import dev.exceptions.CollegueInvalideException;
 import dev.exceptions.CollegueNonTrouveException;
+import dev.repository.CollegueRepository;
 
 @Service
 public class CollegueService {
-	private Map<String, Collegue> data = new HashMap<>();
+	@Autowired
+	CollegueRepository pRepo;
 
-	public CollegueService() {
-		// alimenter data avec des données fictives
-		// Pour générer un matricule : `UUID.randomUUID().toString()`
-		String matriculeHugues = UUID.randomUUID().toString();
-		String matriculeJulie = UUID.randomUUID().toString();
-		String matriculeCat = "043";
-		Collegue hugues = new Collegue(matriculeHugues, "Rocheau", "Hugues", "Rocheau.Hugues@socite.com",
-				LocalDate.of(1994, 12, 4),
-				"https://www.google.com/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwi--62omdfhAhVNKBoKHcXFA6EQjRx6BAgBEAU&url=https%3A%2F%2Ftwitter.com%2Fbastienhugues&psig=AOvVaw1ejLYhf6dT4LI4nO8ONoK8&ust=1555592908226207");
-		Collegue julie = new Collegue(matriculeJulie, "Jeltsch", "Julie", "Jeltsch.julie@socite.com",
-				LocalDate.of(1994, 12, 4), "https://www.francetvinfo.fr/image/75596evse-9d87/840/472/7205071.jpg");
-		Collegue cat = new Collegue("043", "Rousseau", "Catherine", "cat.rousseau@societe.com",
-				LocalDate.of(1964, 10, 3), "https://st.depositphotos.com/1814084/1749/i/950/depositphotos_17495843-stock-photo-catherine-dent.jpg");
-		
-		data.put(matriculeHugues, hugues);
-		data.put(matriculeJulie, julie);
-		data.put(matriculeCat, cat);
+	public List<Collegue> list() {
+		return pRepo.findAll();
+	}
 
+	public void save(Collegue collegueAAjouter) throws CollegueInvalideException {
+		if (collegueAAjouter.getNom().length() <= 2)
+			throw new CollegueInvalideException();
+
+		else if (collegueAAjouter.getPrenoms().length() < 2)
+			throw new CollegueInvalideException();
+
+		else if (!(collegueAAjouter.getEmail().length() > 3 && collegueAAjouter.getEmail().contains("@")))
+			throw new CollegueInvalideException();
+
+		else if (!collegueAAjouter.getPhotoUrl().startsWith("http"))
+			throw new CollegueInvalideException();
+
+		else if (Period.between(collegueAAjouter.getDateDeNaissance(), LocalDate.now()).getYears() < 18)
+			throw new CollegueInvalideException();
+
+		else {
+			pRepo.save(collegueAAjouter);
+		}
 	}
 
 	public List<String> rechercherParNom(String nomRecherche) {
 		// retourner une liste de collègues dont le nom est fourni
-		List<String> listeNoms = data.values().stream().filter(p -> p.getNom().equals(nomRecherche))
-				.map(p -> p.getMatricule()).collect(Collectors.toList());
-		return listeNoms;
+		return pRepo.findAll().stream().filter(p -> p.getNom().equals(nomRecherche)).map(p -> p.getNom())
+				.collect(Collectors.toList());
 	}
 
 	public Collegue rechercherParMatricule(String matriculeRecherche) throws CollegueNonTrouveException {
-		Collegue collegueRecherche = data.get(matriculeRecherche);
+		Collegue collegueRecherche = pRepo.getOne(matriculeRecherche);
 		if (collegueRecherche == null) {
 			throw new CollegueNonTrouveException();
 		}
@@ -64,7 +68,7 @@ public class CollegueService {
 		// Si une des règles ci-dessus n'est pas valide, générer une
 		// exception :
 		// `CollegueInvalideException`.
-		if (!(collegueAAjouter.getNom().length() > 2))
+		if (collegueAAjouter.getNom().length() <= 2)
 			throw new CollegueInvalideException();
 
 		else if (collegueAAjouter.getPrenoms().length() < 2)
@@ -76,20 +80,18 @@ public class CollegueService {
 		else if (!collegueAAjouter.getPhotoUrl().startsWith("http"))
 			throw new CollegueInvalideException();
 
-		else if (!(Period.between(collegueAAjouter.getDateDeNaissance(), LocalDate.now()).getYears() >= 18))
+		else if (Period.between(collegueAAjouter.getDateDeNaissance(), LocalDate.now()).getYears() < 18)
 			throw new CollegueInvalideException();
 
 		else {
-			// générer un matricule pour ce collègue
-			// (`UUID.randomUUID().toString()`)
-			String matriculeNouveau = UUID.randomUUID().toString();
+			
 
 			// Création de ce nouveau collègue à ajouter avec son matricule
-			nouveauCollegue = new Collegue(matriculeNouveau, collegueAAjouter.getNom(), collegueAAjouter.getPrenoms(),
+			nouveauCollegue = new Collegue(collegueAAjouter.getNom(), collegueAAjouter.getPrenoms(),
 					collegueAAjouter.getEmail(), collegueAAjouter.getDateDeNaissance(), collegueAAjouter.getPhotoUrl());
 
 			// Sauvegarder le collègue
-			data.put(matriculeNouveau, nouveauCollegue);
+			pRepo.save(nouveauCollegue);
 		}
 
 		return nouveauCollegue;
@@ -113,7 +115,7 @@ public class CollegueService {
 
 		// Modifier le collègue
 		collegueModif.setDateDeNaissance(nouveauDateNaissance);
-		data.put(matricule, collegueModif);
+		pRepo.save(collegueModif);
 		return collegueModif;
 
 	}
@@ -137,7 +139,7 @@ public class CollegueService {
 
 		// Modifier le collègue
 		collegueModif.setEmail(email);
-		data.put(matricule, collegueModif);
+		pRepo.save(collegueModif);
 		return collegueModif;
 	}
 
@@ -159,7 +161,7 @@ public class CollegueService {
 
 		// Modifier le collègue
 		collegueModif.setPhotoUrl(photoUrl);
-		data.put(matricule, collegueModif);
+		pRepo.save(collegueModif);
 		return collegueModif;
 	}
 

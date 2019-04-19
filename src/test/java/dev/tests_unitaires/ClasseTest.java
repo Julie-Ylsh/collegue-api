@@ -14,7 +14,7 @@ import dev.exceptions.CollegueInvalideException;
 import dev.exceptions.CollegueNonTrouveException;
 import dev.service.CollegueService;
 
-@RunWith( SpringRunner.class )
+@RunWith(SpringRunner.class )
 @SpringBootTest
 public class ClasseTest {
 	@Autowired
@@ -70,18 +70,18 @@ public class ClasseTest {
 
 	@Test(expected = CollegueInvalideException.class)
 	public void testModifierMauvaisEmailCourt() throws CollegueInvalideException, CollegueNonTrouveException {
-		collegueService.modifierEmail("043", "j@");
+		collegueService.modifierEmail("43", "j@");
 	}
 
 	@Test(expected = CollegueInvalideException.class)
 	public void testModifierMauvaisEmailpasBon() throws CollegueInvalideException, CollegueNonTrouveException {
-		collegueService.modifierEmail("043", "jaju");
+		collegueService.modifierEmail("43", "jaju");
 	}
 
 	@Test(expected = CollegueInvalideException.class)
 	public void testModifierMauvaisURLPhoto() throws CollegueInvalideException, CollegueNonTrouveException {
 
-		collegueService.modifierPhotoUrl("043", "photoUrl");
+		collegueService.modifierPhotoUrl("43", "photoUrl");
 	}
 
 }

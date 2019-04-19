@@ -2,6 +2,14 @@ package dev.entites;
 
 import java.time.LocalDate;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "COLLEGUE")
 public class Collegue {
 
 	public Collegue(String nom, String prenoms, String email, LocalDate dateDeNaissance, String photoUrl) {
@@ -31,12 +39,17 @@ public class Collegue {
 	public Collegue() {
 		super();
 	}
+	
+	@Id // obligatoire
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private String matricule ;
+	
 	private String nom ;
 	private String prenoms ;
 	private String email ;
 	private LocalDate dateDeNaissance ;
 	private String photoUrl ;
+	
 	public String getMatricule() {
 		return matricule;
 	}
