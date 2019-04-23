@@ -45,8 +45,7 @@ public class CollegueService {
 
 	public List<String> rechercherParNom(String nomRecherche) {
 		// retourner une liste de collègues dont le nom est fourni
-		return pRepo.findAll().stream().filter(p -> p.getNom().equals(nomRecherche)).map(p -> p.getNom())
-				.collect(Collectors.toList());
+		return pRepo.findAll().stream().filter(p -> p.getNom().equals(nomRecherche)).				.collect(Collectors.toList());
 	}
 
 	public Collegue rechercherParMatricule(String matriculeRecherche) throws CollegueNonTrouveException {
@@ -163,6 +162,14 @@ public class CollegueService {
 		collegueModif.setPhotoUrl(photoUrl);
 		pRepo.save(collegueModif);
 		return collegueModif;
+	}
+
+	public CollegueRepository getpRepo() {
+		return pRepo;
+	}
+
+	public void setpRepo(CollegueRepository pRepo) {
+		this.pRepo = pRepo;
 	}
 
 }
