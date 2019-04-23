@@ -45,7 +45,7 @@ public class CollegueService {
 
 	public List<String> rechercherParNom(String nomRecherche) {
 		// retourner une liste de collègues dont le nom est fourni
-		return pRepo.findAll().stream().filter(p -> p.getNom().equals(nomRecherche)).				.collect(Collectors.toList());
+		return pRepo.findAll().stream().filter(p -> p.getNom().equals(nomRecherche)).collect(Collectors.toList());
 	}
 
 	public Collegue rechercherParMatricule(String matriculeRecherche) throws CollegueNonTrouveException {
