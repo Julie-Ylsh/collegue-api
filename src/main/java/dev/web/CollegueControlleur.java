@@ -31,7 +31,7 @@ public class CollegueControlleur {
 
 	@GetMapping
 	@ResponseBody 
-	public List<String> afficherNom(@RequestParam("nomClient") String nomClient) {
+	public List<Collegue> afficherNom(@RequestParam("nomClient") String nomClient) {
 
 		return collegueService.rechercherParNom(nomClient);
 
