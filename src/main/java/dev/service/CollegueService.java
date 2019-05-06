@@ -23,7 +23,7 @@ public class CollegueService {
 	}
 
 	public void save(Collegue collegueAAjouter) throws CollegueInvalideException {
-		if (collegueAAjouter.getNom().length() <= 2)
+		if (collegueAAjouter.getNom().length() < 2)
 			throw new CollegueInvalideException();
 
 		else if (collegueAAjouter.getPrenoms().length() < 2)
@@ -56,6 +56,11 @@ public class CollegueService {
 		return collegueRecherche;
 	}
 
+	public List<Collegue> rechercherParMail(String mailRecherche) throws CollegueNonTrouveException {
+		// retourner une liste de collègues dont le nom est fourni
+		return pRepo.findAll().stream().filter(p -> p.getEmail().equals(mailRecherche)).collect(Collectors.toList());
+	}
+
 	public Collegue ajouterUnCollegue(Collegue collegueAAjouter) throws CollegueInvalideException {
 		Collegue nouveauCollegue = null;
 
@@ -67,7 +72,7 @@ public class CollegueService {
 		// Si une des règles ci-dessus n'est pas valide, générer une
 		// exception :
 		// `CollegueInvalideException`.
-		if (collegueAAjouter.getNom().length() <= 2)
+		if (collegueAAjouter.getNom().length() < 2)
 			throw new CollegueInvalideException();
 
 		else if (collegueAAjouter.getPrenoms().length() < 2)
@@ -83,7 +88,6 @@ public class CollegueService {
 			throw new CollegueInvalideException();
 
 		else {
-			
 
 			// Création de ce nouveau collègue à ajouter avec son matricule
 			nouveauCollegue = new Collegue(collegueAAjouter.getNom(), collegueAAjouter.getPrenoms(),
