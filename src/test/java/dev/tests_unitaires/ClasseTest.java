@@ -1,7 +1,6 @@
 package dev.tests_unitaires;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +19,7 @@ public class ClasseTest {
 	@Autowired
 	private CollegueService collegueService;
 	
-	String matricule = UUID.randomUUID().toString();
+	Integer matricule = (int) Math.random();
 	Collegue collegueTest = new Collegue(matricule, "Jeltsch", "Julie", "Jeltsch.julie@socite.com",
 			LocalDate.of(1994, 12, 4), "https://www.francetvinfo.fr/image/75596evse-9d87/840/472/7205071.jpg");
 
@@ -70,18 +69,18 @@ public class ClasseTest {
 
 	@Test(expected = CollegueInvalideException.class)
 	public void testModifierMauvaisEmailCourt() throws CollegueInvalideException, CollegueNonTrouveException {
-		collegueService.modifierEmail("43", "j@");
+		collegueService.modifierEmail(43, "j@");
 	}
 
 	@Test(expected = CollegueInvalideException.class)
 	public void testModifierMauvaisEmailpasBon() throws CollegueInvalideException, CollegueNonTrouveException {
-		collegueService.modifierEmail("43", "jaju");
+		collegueService.modifierEmail(43, "jaju");
 	}
 
 	@Test(expected = CollegueInvalideException.class)
 	public void testModifierMauvaisURLPhoto() throws CollegueInvalideException, CollegueNonTrouveException {
 
-		collegueService.modifierPhotoUrl("43", "photoUrl");
+		collegueService.modifierPhotoUrl(43, "photoUrl");
 	}
 
 }

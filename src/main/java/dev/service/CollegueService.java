@@ -9,17 +9,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import dev.entites.Collegue;
+import dev.entites.CollegueSansCommentaire;
+import dev.entites.Commentaires;
+import dev.entites.CommentairesSansCollegue;
 import dev.exceptions.CollegueInvalideException;
 import dev.exceptions.CollegueNonTrouveException;
 import dev.repository.CollegueRepository;
+import dev.repository.CommentaireRepository;
 
 @Service
 public class CollegueService {
 	@Autowired
-	CollegueRepository pRepo;
-
-	public List<Collegue> list() {
-		return pRepo.findAll();
+	CollegueRepository cRepo;
+	
+	@Autowired
+	CommentaireRepository cmRepo;
+	
+	
+	public List<CollegueSansCommentaire> list() {
+		return cRepo.findAll().stream().map(collegue -> new CollegueSansCommentaire (collegue.getMatricule(), collegue.getNom(), collegue.getPrenoms(), collegue.getEmail(), collegue.getDateDeNaissance(), collegue.getPhotoUrl())).collect(Collectors.toList());
+	}
+	
+	public List<CommentairesSansCollegue> listeCommentairesParMatricule(Integer matricule){
+		return cmRepo.findByCollegueMatricule(matricule).stream().map(commentaire -> new CommentairesSansCollegue(commentaire.getCommentaire(), commentaire.getDateCommentaire())).collect(Collectors.toList());			
+		
 	}
 
 	public void save(Collegue collegueAAjouter) throws CollegueInvalideException {
@@ -39,26 +52,23 @@ public class CollegueService {
 			throw new CollegueInvalideException();
 
 		else {
-			pRepo.save(collegueAAjouter);
+			cRepo.save(collegueAAjouter);
 		}
 	}
 
 	public List<Collegue> rechercherParNom(String nomRecherche) {
 		// retourner une liste de collègues dont le nom est fourni
-		return pRepo.findAll().stream().filter(p -> p.getNom().equals(nomRecherche)).collect(Collectors.toList());
+		return cRepo.findAll().stream().filter(p -> p.getNom().equals(nomRecherche)).collect(Collectors.toList());
 	}
 
-	public Collegue rechercherParMatricule(String matriculeRecherche) throws CollegueNonTrouveException {
-		Collegue collegueRecherche = pRepo.getOne(matriculeRecherche);
-		if (collegueRecherche == null) {
-			throw new CollegueNonTrouveException();
-		}
-		return collegueRecherche;
+	public Collegue rechercherParMatricule(Integer matriculeRecherche) throws CollegueNonTrouveException {
+		return cRepo.findById(matriculeRecherche).orElseThrow(CollegueNonTrouveException::new); 
+		
 	}
 
 	public List<Collegue> rechercherParMail(String mailRecherche) throws CollegueNonTrouveException {
 		// retourner une liste de collègues dont le nom est fourni
-		return pRepo.findAll().stream().filter(p -> p.getEmail().equals(mailRecherche)).collect(Collectors.toList());
+		return cRepo.findAll().stream().filter(p -> p.getEmail().equals(mailRecherche)).collect(Collectors.toList());
 	}
 
 	public Collegue ajouterUnCollegue(Collegue collegueAAjouter) throws CollegueInvalideException {
@@ -94,13 +104,13 @@ public class CollegueService {
 					collegueAAjouter.getEmail(), collegueAAjouter.getDateDeNaissance(), collegueAAjouter.getPhotoUrl());
 
 			// Sauvegarder le collègue
-			pRepo.save(nouveauCollegue);
+			cRepo.save(nouveauCollegue);
 		}
 
 		return nouveauCollegue;
 	}
 
-	public Collegue modifierDateNaissance(String matricule, LocalDate nouveauDateNaissance)
+	public Collegue modifierDateNaissance(Integer matricule, LocalDate nouveauDateNaissance)
 			throws CollegueInvalideException, CollegueNonTrouveException {
 		Collegue collegueModif = rechercherParMatricule(matricule);
 
@@ -118,12 +128,12 @@ public class CollegueService {
 
 		// Modifier le collègue
 		collegueModif.setDateDeNaissance(nouveauDateNaissance);
-		pRepo.save(collegueModif);
+		cRepo.save(collegueModif);
 		return collegueModif;
 
 	}
 
-	public Collegue modifierEmail(String matricule, String email)
+	public Collegue modifierEmail(Integer matricule, String email)
 			throws CollegueNonTrouveException, CollegueInvalideException {
 		Collegue collegueModif = rechercherParMatricule(matricule);
 
@@ -142,11 +152,11 @@ public class CollegueService {
 
 		// Modifier le collègue
 		collegueModif.setEmail(email);
-		pRepo.save(collegueModif);
+		cRepo.save(collegueModif);
 		return collegueModif;
 	}
 
-	public Collegue modifierPhotoUrl(String matricule, String photoUrl)
+	public Collegue modifierPhotoUrl(Integer matricule, String photoUrl)
 			throws CollegueNonTrouveException, CollegueInvalideException {
 		Collegue collegueModif = rechercherParMatricule(matricule);
 
@@ -164,16 +174,29 @@ public class CollegueService {
 
 		// Modifier le collègue
 		collegueModif.setPhotoUrl(photoUrl);
-		pRepo.save(collegueModif);
+		cRepo.save(collegueModif);
 		return collegueModif;
 	}
+	
+	public void ajouterCommentaire(Integer matricule, String commentaire) throws CollegueNonTrouveException {
+		Collegue collegueTrouve= rechercherParMatricule(matricule);
+		if (collegueTrouve == null) {
+			throw new CollegueNonTrouveException();
+		}
+		Commentaires nouveauCommentaire = new Commentaires(commentaire, collegueTrouve);
+		collegueTrouve.getListeCommentaires().add(nouveauCommentaire);
+		cRepo.save(collegueTrouve);
+		cmRepo.save(nouveauCommentaire);
+		
+		
+		}
 
 	public CollegueRepository getpRepo() {
-		return pRepo;
+		return cRepo;
 	}
 
 	public void setpRepo(CollegueRepository pRepo) {
-		this.pRepo = pRepo;
+		this.cRepo = pRepo;
 	}
 
 }

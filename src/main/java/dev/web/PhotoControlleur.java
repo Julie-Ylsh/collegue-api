@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +16,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.entites.Collegue;
+import dev.entites.CollegueSansCommentaire;
+import dev.entites.Commentaires;
+import dev.entites.CommentairesSansCollegue;
 import dev.entites.PhotoUrl;
 import dev.exceptions.CollegueInvalideException;
 import dev.exceptions.CollegueNonTrouveException;
@@ -29,7 +33,7 @@ public class PhotoControlleur {
 	private CollegueService collegueService;
 
 	@PatchMapping(path = "/{matricule}")
-	public ResponseEntity<String> afficherModifierPhoto(@PathVariable String matricule, @RequestBody PhotoUrl photo)
+	public ResponseEntity<String> afficherModifierPhoto(@PathVariable Integer matricule, @RequestBody PhotoUrl photo)
 			throws CollegueNonTrouveException {
 		try {
 			Collegue collegueAModifier = collegueService.rechercherParMatricule(matricule);
@@ -43,18 +47,45 @@ public class PhotoControlleur {
 		}
 	}
 
+	// Renvoie un collègue entier d'après son matricule
 	@GetMapping(path = "/found")
 	@ResponseBody
-	public Collegue afficherPhoto(@RequestParam("matricule") String matricule) throws CollegueNonTrouveException {
-		return collegueService.rechercherParMatricule(matricule);
+	public CollegueSansCommentaire afficherCollegueParMatricule(@RequestParam("matricule") Integer matricule)
+			throws CollegueNonTrouveException {
+		Collegue collegueCommentaires = collegueService.rechercherParMatricule(matricule);
+		return new CollegueSansCommentaire(collegueCommentaires.getMatricule(), collegueCommentaires.getNom(), collegueCommentaires.getPrenoms(), collegueCommentaires.getEmail(), collegueCommentaires.getDateDeNaissance(), collegueCommentaires.getPhotoUrl());
 
 	}
 
 	@GetMapping
 	@ResponseBody
-	public List<Collegue> afficherToutesPhoto() {
+	public List<CollegueSansCommentaire> afficherToutesPhoto() {
 
 		return collegueService.list();
+
+	}
+
+	@PostMapping(path = "/{matricule}/commentaire")
+	@ResponseBody
+	public ResponseEntity<String> ajouterCommentaire(@PathVariable Integer matricule,
+			@RequestBody Commentaires commentaire) {
+
+		try {
+			collegueService.ajouterCommentaire(matricule, commentaire.getCommentaire());
+			return ResponseEntity.status(200).body("Commentaire ajouté pour le collègue");
+		}
+
+		catch (CollegueNonTrouveException e) {
+			return ResponseEntity.status(404).body("Vous n'avez pas entré les bons paramètres");
+		}
+
+	}
+
+	@GetMapping(path = "/{matricule}/commentaires")
+	@ResponseBody
+	public List<CommentairesSansCollegue> afficherCommentaire(@PathVariable Integer matricule) {
+		List<CommentairesSansCollegue> listeAffichee = collegueService.listeCommentairesParMatricule(matricule);
+		return listeAffichee;
 
 	}
 

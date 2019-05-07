@@ -1,6 +1,7 @@
 package dev.web;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.entites.Collegue;
+import dev.entites.CollegueSansCommentaire;
 import dev.exceptions.CollegueNonTrouveException;
 import dev.service.CollegueService;
 
@@ -24,8 +26,10 @@ public class CollegueMailControlleur {
 	
 	@GetMapping
 	@ResponseBody 
-	public List<Collegue> afficherMail(@RequestParam("mail") String mailCollegue) throws CollegueNonTrouveException {
-		return collegueService.rechercherParMail(mailCollegue);
+	public List<CollegueSansCommentaire> afficherMail(@RequestParam("mail") String mailCollegue) throws CollegueNonTrouveException {
+		List<Collegue> listeAvecCommentaires = collegueService.rechercherParMail(mailCollegue);
+		return listeAvecCommentaires.stream().map(collegue -> new CollegueSansCommentaire (collegue.getMatricule(), collegue.getNom(), collegue.getPrenoms(), collegue.getEmail(), collegue.getDateDeNaissance(), collegue.getPhotoUrl())).collect(Collectors.toList());	
+		
 
 	}
 

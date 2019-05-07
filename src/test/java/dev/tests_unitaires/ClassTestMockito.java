@@ -15,7 +15,7 @@ import dev.repository.CollegueRepository;
 import dev.service.CollegueService;
 
 public class ClassTestMockito {
-	Collegue collegueTest = new Collegue("43", "Jeltsch", "Julie", "Jeltsch.julie@socite.com",
+	Collegue collegueTest = new Collegue(43, "Jeltsch", "Julie", "Jeltsch.julie@socite.com",
 			LocalDate.of(1994, 12, 4), "https://www.francetvinfo.fr/image/75596evse-9d87/840/472/7205071.jpg");
 
 	CollegueRepository repoMock = Mockito.mock(CollegueRepository.class);
@@ -72,22 +72,22 @@ public class ClassTestMockito {
 
 	@Test(expected = CollegueInvalideException.class)
 	public void testModifierMauvaisEmailCourt() throws CollegueInvalideException, CollegueNonTrouveException {
-		Mockito.when(repoMock.getOne("43")).thenReturn(new Collegue ("43", "Jeltsch", "Julie", "Jeltsch.julie@socite.com",
+		Mockito.when(repoMock.getOne(43)).thenReturn(new Collegue (43, "Jeltsch", "Julie", "Jeltsch.julie@socite.com",
 			LocalDate.of(1994, 12, 4), "https://www.francetvinfo.fr/image/75596evse-9d87/840/472/7205071.jpg"));
-		collegueService.modifierEmail("43", "e@");
+		collegueService.modifierEmail(43, "e@");
 	}
 
 	@Test(expected = CollegueInvalideException.class)
 	public void testModifierMauvaisEmailpasBon() throws CollegueInvalideException, CollegueNonTrouveException {
-		Mockito.when(repoMock.getOne("43")).thenReturn(new Collegue ("43", "Jeltsch", "Julie", "Jeltsch.julie@socite.com",
+		Mockito.when(repoMock.getOne(43)).thenReturn(new Collegue (43, "Jeltsch", "Julie", "Jeltsch.julie@socite.com",
 				LocalDate.of(1994, 12, 4), "https://www.francetvinfo.fr/image/75596evse-9d87/840/472/7205071.jpg"));
-			collegueService.modifierEmail("43", "jaju");
+			collegueService.modifierEmail(43, "jaju");
 	}
 
 	@Test(expected = CollegueInvalideException.class)
 	public void testModifierMauvaisURLPhoto() throws CollegueInvalideException, CollegueNonTrouveException {
-		Mockito.when(repoMock.getOne("43")).thenReturn(new Collegue ("43", "Jeltsch", "Julie", "Jeltsch.julie@socite.com",
+		Mockito.when(repoMock.getOne(43)).thenReturn(new Collegue (43, "Jeltsch", "Julie", "Jeltsch.julie@socite.com",
 				LocalDate.of(1994, 12, 4), "https://www.francetvinfo.fr/image/75596evse-9d87/840/472/7205071.jpg"));
-			collegueService.modifierPhotoUrl("43","mauvaisUrl");
+			collegueService.modifierPhotoUrl(43,"mauvaisUrl");
 	}
 }
