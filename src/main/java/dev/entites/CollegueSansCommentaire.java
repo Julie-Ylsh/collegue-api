@@ -1,21 +1,25 @@
 package dev.entites;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CollegueSansCommentaire {
 
-	public CollegueSansCommentaire(String nom, String prenoms, String email, LocalDate dateDeNaissance,
-			String photoUrl) {
+	public CollegueSansCommentaire(String nom, String prenoms, String email, LocalDate dateDeNaissance, String photoUrl,
+			List<String> roles) {
 		super();
 		this.nom = nom;
 		this.prenoms = prenoms;
 		this.email = email;
 		this.dateDeNaissance = dateDeNaissance;
 		this.photoUrl = photoUrl;
+		this.roles = roles;
 	}
 
+	// Avec matricule
 	public CollegueSansCommentaire(Integer matricule, String nom, String prenoms, String email,
-			LocalDate dateDeNaissance, String photoUrl) {
+			LocalDate dateDeNaissance, String photoUrl, List<String> roles) {
 		super();
 		this.matricule = matricule;
 		this.nom = nom;
@@ -23,9 +27,8 @@ public class CollegueSansCommentaire {
 		this.email = email;
 		this.dateDeNaissance = dateDeNaissance;
 		this.photoUrl = photoUrl;
+		this.roles = roles;
 	}
-
-	
 
 	public CollegueSansCommentaire(String nom) {
 		super();
@@ -42,6 +45,7 @@ public class CollegueSansCommentaire {
 	private String email;
 	private LocalDate dateDeNaissance;
 	private String photoUrl;
+	private List<String> roles = new ArrayList<>();
 
 	public Integer getMatricule() {
 		return matricule;
@@ -89,6 +93,14 @@ public class CollegueSansCommentaire {
 
 	public void setPhotoUrl(String photoUrl) {
 		this.photoUrl = photoUrl;
+	}
+
+	public List<String> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
 	}
 
 }

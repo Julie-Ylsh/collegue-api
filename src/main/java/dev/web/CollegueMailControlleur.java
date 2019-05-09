@@ -28,7 +28,7 @@ public class CollegueMailControlleur {
 	@ResponseBody 
 	public List<CollegueSansCommentaire> afficherMail(@RequestParam("mail") String mailCollegue) throws CollegueNonTrouveException {
 		List<Collegue> listeAvecCommentaires = collegueService.rechercherParMail(mailCollegue);
-		return listeAvecCommentaires.stream().map(collegue -> new CollegueSansCommentaire (collegue.getMatricule(), collegue.getNom(), collegue.getPrenoms(), collegue.getEmail(), collegue.getDateDeNaissance(), collegue.getPhotoUrl())).collect(Collectors.toList());	
+		return listeAvecCommentaires.stream().map(collegue -> new CollegueSansCommentaire (collegue.getMatricule(), collegue.getNom(), collegue.getPrenoms(), collegue.getEmail(), collegue.getDateDeNaissance(), collegue.getPhotoUrl(), collegue.getRoles())).collect(Collectors.toList());	
 		
 
 	}

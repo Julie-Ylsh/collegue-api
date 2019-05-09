@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -36,11 +37,11 @@ public class CollegueControlleur {
 	@GetMapping
 	@ResponseBody
 	public List<CollegueSansCommentaire> afficherNom(@RequestParam("nomClient") String nomClient) {
-		List<Collegue> listeAvecCommentaires = collegueService.rechercherParNom(nomClient);
-		return listeAvecCommentaires.stream()
+		List<Collegue> listeDeNoms = collegueService.rechercherParNom(nomClient);
+		return listeDeNoms.stream()
 				.map(collegue -> new CollegueSansCommentaire(collegue.getMatricule(), collegue.getNom(),
 						collegue.getPrenoms(), collegue.getEmail(), collegue.getDateDeNaissance(),
-						collegue.getPhotoUrl()))
+						collegue.getPhotoUrl(), collegue.getRoles()))
 				.collect(Collectors.toList());
 
 	}
@@ -59,6 +60,7 @@ public class CollegueControlleur {
 
 	}
 
+	@Secured("ROLE_ADMIN")
 	@PostMapping
 	@ResponseBody
 	public ResponseEntity<String> creerCollegue(@RequestBody Collegue collegueAAjouter) {
@@ -75,6 +77,7 @@ public class CollegueControlleur {
 
 	}
 
+	@Secured("ROLE_ADMIN")
 	@PatchMapping(path = "/{matricule}")
 	public ResponseEntity<String> afficherModifierMail(@PathVariable Integer matricule, @RequestBody Email email)
 			throws CollegueNonTrouveException {

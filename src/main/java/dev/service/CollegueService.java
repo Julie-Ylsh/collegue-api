@@ -2,6 +2,7 @@ package dev.service;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,18 +22,24 @@ import dev.repository.CommentaireRepository;
 public class CollegueService {
 	@Autowired
 	CollegueRepository cRepo;
-	
+
 	@Autowired
 	CommentaireRepository cmRepo;
-	
-	
+
 	public List<CollegueSansCommentaire> list() {
-		return cRepo.findAll().stream().map(collegue -> new CollegueSansCommentaire (collegue.getMatricule(), collegue.getNom(), collegue.getPrenoms(), collegue.getEmail(), collegue.getDateDeNaissance(), collegue.getPhotoUrl())).collect(Collectors.toList());
+		return cRepo.findAll().stream()
+				.map(collegue -> new CollegueSansCommentaire(collegue.getMatricule(), collegue.getNom(),
+						collegue.getPrenoms(), collegue.getEmail(), collegue.getDateDeNaissance(),
+						collegue.getPhotoUrl(), collegue.getRoles()))
+				.collect(Collectors.toList());
 	}
-	
-	public List<CommentairesSansCollegue> listeCommentairesParMatricule(Integer matricule){
-		return cmRepo.findByCollegueMatricule(matricule).stream().map(commentaire -> new CommentairesSansCollegue(commentaire.getCommentaire(), commentaire.getDateCommentaire())).collect(Collectors.toList());			
-		
+
+	public List<CommentairesSansCollegue> listeCommentairesParMatricule(Integer matricule) {
+		return cmRepo.findByCollegueMatricule(matricule).stream()
+				.map(commentaire -> new CommentairesSansCollegue(commentaire.getCommentaire(),
+						commentaire.getDateCommentaire()))
+				.collect(Collectors.toList());
+
 	}
 
 	public void save(Collegue collegueAAjouter) throws CollegueInvalideException {
@@ -62,8 +69,8 @@ public class CollegueService {
 	}
 
 	public Collegue rechercherParMatricule(Integer matriculeRecherche) throws CollegueNonTrouveException {
-		return cRepo.findById(matriculeRecherche).orElseThrow(CollegueNonTrouveException::new); 
-		
+		return cRepo.findById(matriculeRecherche).orElseThrow(CollegueNonTrouveException::new);
+
 	}
 
 	public List<Collegue> rechercherParMail(String mailRecherche) throws CollegueNonTrouveException {
@@ -99,9 +106,11 @@ public class CollegueService {
 
 		else {
 
-			// Création de ce nouveau collègue à ajouter avec son matricule
-			nouveauCollegue = new Collegue(collegueAAjouter.getNom(), collegueAAjouter.getPrenoms(),
-					collegueAAjouter.getEmail(), collegueAAjouter.getDateDeNaissance(), collegueAAjouter.getPhotoUrl());
+			// Création de ce nouveau collègue à ajouter avec son matricule (role par défaut user)
+			collegueAAjouter.setRoles(Arrays.asList("ROLE_USER"));
+			nouveauCollegue = new Collegue(collegueAAjouter.getMotDePasse(), collegueAAjouter.getNom(),
+					collegueAAjouter.getPrenoms(), collegueAAjouter.getEmail(), collegueAAjouter.getDateDeNaissance(),
+					collegueAAjouter.getPhotoUrl(), collegueAAjouter.getRoles());
 
 			// Sauvegarder le collègue
 			cRepo.save(nouveauCollegue);
@@ -177,9 +186,9 @@ public class CollegueService {
 		cRepo.save(collegueModif);
 		return collegueModif;
 	}
-	
+
 	public void ajouterCommentaire(Integer matricule, String commentaire) throws CollegueNonTrouveException {
-		Collegue collegueTrouve= rechercherParMatricule(matricule);
+		Collegue collegueTrouve = rechercherParMatricule(matricule);
 		if (collegueTrouve == null) {
 			throw new CollegueNonTrouveException();
 		}
@@ -187,9 +196,8 @@ public class CollegueService {
 		collegueTrouve.getListeCommentaires().add(nouveauCommentaire);
 		cRepo.save(collegueTrouve);
 		cmRepo.save(nouveauCommentaire);
-		
-		
-		}
+
+	}
 
 	public CollegueRepository getpRepo() {
 		return cRepo;

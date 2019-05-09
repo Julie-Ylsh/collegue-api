@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -32,6 +33,7 @@ public class PhotoControlleur {
 	@Autowired
 	private CollegueService collegueService;
 
+	@Secured("ROLE_ADMIN")
 	@PatchMapping(path = "/{matricule}")
 	public ResponseEntity<String> afficherModifierPhoto(@PathVariable Integer matricule, @RequestBody PhotoUrl photo)
 			throws CollegueNonTrouveException {
@@ -53,7 +55,7 @@ public class PhotoControlleur {
 	public CollegueSansCommentaire afficherCollegueParMatricule(@RequestParam("matricule") Integer matricule)
 			throws CollegueNonTrouveException {
 		Collegue collegueCommentaires = collegueService.rechercherParMatricule(matricule);
-		return new CollegueSansCommentaire(collegueCommentaires.getMatricule(), collegueCommentaires.getNom(), collegueCommentaires.getPrenoms(), collegueCommentaires.getEmail(), collegueCommentaires.getDateDeNaissance(), collegueCommentaires.getPhotoUrl());
+		return new CollegueSansCommentaire(collegueCommentaires.getMatricule(), collegueCommentaires.getNom(), collegueCommentaires.getPrenoms(), collegueCommentaires.getEmail(), collegueCommentaires.getDateDeNaissance(), collegueCommentaires.getPhotoUrl(), collegueCommentaires.getRoles());
 
 	}
 
