@@ -41,10 +41,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 				// désactivation de la protection CSRF
 				// non utilisée dans le cadre d'une Web API
-				.csrf().disable().authorizeRequests()
+				.csrf().disable()
+				.cors().and()
+				.authorizeRequests()
+				
 
-				// un GET /exemples n'est pas soumise à authentification
-				.antMatchers(HttpMethod.GET, "/exemples").permitAll()
+				// un GET /collegue/photo n'est pas soumis à authentification
+				.antMatchers(HttpMethod.GET, "/collegue/photo").permitAll()
 
 				// Mais un GET /admin est réservé aux utilisateurs ayant un role
 				// admin

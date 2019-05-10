@@ -34,6 +34,7 @@ import dev.service.CollegueService;
 import io.jsonwebtoken.Jwts;
 
 @RestController
+
 public class AuthentificationCtrl {
 	@Value("${jwt.expires_in}")
 	private Integer EXPIRES_IN;
