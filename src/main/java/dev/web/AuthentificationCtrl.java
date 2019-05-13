@@ -51,7 +51,7 @@ public class AuthentificationCtrl {
 	@Autowired
 	private CollegueService collegueService;
 
-	@PostMapping(value = "/login")
+	@PostMapping(value = "/auth")
 	public ResponseEntity setCookie(@RequestBody  InfosAuthentification authenticationRequest,
 			HttpServletResponse response) {
 		System.out.println("hello");
