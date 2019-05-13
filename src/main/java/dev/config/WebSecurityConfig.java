@@ -48,6 +48,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 				// un GET /collegue/photo n'est pas soumis à authentification
 				.antMatchers(HttpMethod.GET, "/collegue/photo").permitAll()
+				
 
 				// Mais un GET /admin est réservé aux utilisateurs ayant un role
 				// admin
