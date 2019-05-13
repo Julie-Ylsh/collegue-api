@@ -46,6 +46,19 @@ public class CollegueControlleur {
 
 	}
 
+	// Renvoie un collègue entier (avec mot de passe) d'après son matricule
+	@GetMapping(path = "/found")
+	@ResponseBody
+	public CollegueSansCommentaire afficherCollegueParMatricule(@RequestParam("matricule") Integer matricule)
+			throws CollegueNonTrouveException {
+		Collegue collegueCommentaires = collegueService.rechercherParMatricule(matricule);
+		return new CollegueSansCommentaire(collegueCommentaires.getMotDePasse(), collegueCommentaires.getMatricule(), collegueCommentaires.getNom(),
+				collegueCommentaires.getPrenoms(), collegueCommentaires.getEmail(),
+				collegueCommentaires.getDateDeNaissance(), collegueCommentaires.getPhotoUrl(),
+				collegueCommentaires.getRoles());
+
+	}
+
 	@GetMapping(path = "/{matricule}")
 	@ResponseBody
 	public ResponseEntity<String> afficherMatricule(@PathVariable Integer matricule) {

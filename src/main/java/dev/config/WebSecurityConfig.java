@@ -46,8 +46,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests()
 				
 
-				// un GET /collegue/photo n'est pas soumis à authentification
+				// un GET /collegue/photo et found n'est pas soumis à authentification
 				.antMatchers(HttpMethod.GET, "/collegue/photo").permitAll()
+				
 				
 
 				// Mais un GET /admin est réservé aux utilisateurs ayant un role
@@ -55,7 +56,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/admin").hasRole("ADMIN")
 
 				// accès à la console h2 sans authentification
-				.antMatchers("/h2-console/**").permitAll().antMatchers("/auth").permitAll()
+				.antMatchers("/h2-console/**").permitAll()
+				.antMatchers("/auth").permitAll()
+				
 
 				// Les autres requêtes sont soumises à authentification
 				.anyRequest().authenticated()

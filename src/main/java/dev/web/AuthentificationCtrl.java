@@ -51,37 +51,37 @@ public class AuthentificationCtrl {
 	@Autowired
 	private CollegueService collegueService;
 
-	@PostMapping(value = "/auth")
-	public ResponseEntity authenticate(@RequestBody InfosAuthentification authenticationRequest,
+	@PostMapping(value = "/login")
+	public ResponseEntity setCookie(@RequestBody  InfosAuthentification authenticationRequest,
 			HttpServletResponse response) {
 		System.out.println("hello");
 		// encapsulation des informations de connexion
-		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-				authenticationRequest.getMatriculeCollegue(), authenticationRequest.getMotDePasse());
+				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+						authenticationRequest.getMatriculeCollegue(), authenticationRequest.getMotDePasse());
 
-		// vérification de l'authentification
-		// une exception de type `BadCredentialsException` en cas d'informations
-		// non valides
-		Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+				// vérification de l'authentification
+				// une exception de type `BadCredentialsException` en cas d'informations
+				// non valides
+				Authentication authentication = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
-		User user = (User) authentication.getPrincipal();
+				User user = (User) authentication.getPrincipal();
 
-		String rolesList = user.getAuthorities().stream().map(a -> a.getAuthority()).collect(Collectors.joining(","));
+				String rolesList = user.getAuthorities().stream().map(a -> a.getAuthority()).collect(Collectors.joining(","));
 
-		Map<String, Object> infosSupplementaireToken = new HashMap<>();
-		infosSupplementaireToken.put("roles", rolesList);
+				Map<String, Object> infosSupplementaireToken = new HashMap<>();
+				infosSupplementaireToken.put("roles", rolesList);
 
-		String jetonJWT = Jwts.builder().setSubject(user.getUsername()).addClaims(infosSupplementaireToken)
-				.setExpiration(new Date(System.currentTimeMillis() + EXPIRES_IN * 1000))
-				.signWith(io.jsonwebtoken.SignatureAlgorithm.HS512, SECRET).compact();
+				String jetonJWT = Jwts.builder().setSubject(user.getUsername()).addClaims(infosSupplementaireToken)
+						.setExpiration(new Date(System.currentTimeMillis() + EXPIRES_IN * 1000))
+						.signWith(io.jsonwebtoken.SignatureAlgorithm.HS512, SECRET).compact();
 
-		Cookie authCookie = new Cookie(TOKEN_COOKIE, jetonJWT);
-		authCookie.setHttpOnly(true);
-		authCookie.setMaxAge(EXPIRES_IN * 1000);
-		authCookie.setPath("/");
-		response.addCookie(authCookie);
+				Cookie authCookie = new Cookie(TOKEN_COOKIE, jetonJWT);
+				authCookie.setHttpOnly(true);
+				authCookie.setMaxAge(EXPIRES_IN * 1000);
+				authCookie.setPath("/");
+				response.addCookie(authCookie);
 
-		return ResponseEntity.ok().build();
+				return ResponseEntity.ok().build();
 
 	}
 

@@ -6,6 +6,7 @@ import java.util.List;
 
 public class CollegueSansCommentaire {
 
+	// Sans matricule ni mot de passe
 	public CollegueSansCommentaire(String nom, String prenoms, String email, LocalDate dateDeNaissance, String photoUrl,
 			List<String> roles) {
 		super();
@@ -17,7 +18,7 @@ public class CollegueSansCommentaire {
 		this.roles = roles;
 	}
 
-	// Avec matricule
+	// Avec matricule sans mot de passe
 	public CollegueSansCommentaire(Integer matricule, String nom, String prenoms, String email,
 			LocalDate dateDeNaissance, String photoUrl, List<String> roles) {
 		super();
@@ -28,6 +29,28 @@ public class CollegueSansCommentaire {
 		this.dateDeNaissance = dateDeNaissance;
 		this.photoUrl = photoUrl;
 		this.roles = roles;
+	}
+
+	// Avec matricule et mot de passe
+	public CollegueSansCommentaire(String motDePasse, Integer matricule, String nom, String prenoms, String email,
+			LocalDate dateDeNaissance, String photoUrl, List<String> roles) {
+		super();
+		this.matricule = matricule;
+		this.nom = nom;
+		this.prenoms = prenoms;
+		this.email = email;
+		this.dateDeNaissance = dateDeNaissance;
+		this.photoUrl = photoUrl;
+		this.roles = roles;
+		this.motDePasse = motDePasse;
+	}
+
+	// Pourl'inscription, avec matricule, mot de passe et photo
+	public CollegueSansCommentaire(String motDePasse, Integer matricule, String photoUrl) {
+		super();
+		this.matricule = matricule;
+		this.photoUrl = photoUrl;
+		this.motDePasse = motDePasse;
 	}
 
 	public CollegueSansCommentaire(String nom) {
@@ -46,6 +69,7 @@ public class CollegueSansCommentaire {
 	private LocalDate dateDeNaissance;
 	private String photoUrl;
 	private List<String> roles = new ArrayList<>();
+	private String motDePasse;
 
 	public Integer getMatricule() {
 		return matricule;
@@ -101,6 +125,14 @@ public class CollegueSansCommentaire {
 
 	public void setRoles(List<String> roles) {
 		this.roles = roles;
+	}
+
+	public String getMotDePasse() {
+		return motDePasse;
+	}
+
+	public void setMotDePasse(String motDePasse) {
+		this.motDePasse = motDePasse;
 	}
 
 }
